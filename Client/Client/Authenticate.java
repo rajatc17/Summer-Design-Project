@@ -3,14 +3,12 @@ package Client;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 
 class Authenticate extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	private Socket cSocket = null;
+	private Socket host_socket = null;
 	private	DataOutputStream psswrchk = null;
 	private	DataInputStream verification = null;
 	private	String verify ="";
@@ -20,11 +18,11 @@ class Authenticate extends JFrame implements ActionListener{
 	private	String width="",height="";
 	private	final JTextField text1;
 
-	Authenticate(Socket cSocket){
+	Authenticate(Socket host_socket){
 		label1=new JLabel();
 		label1.setText("Password");
 		text1 = new JTextField(15);
-		this.cSocket = cSocket;
+		this.host_socket = host_socket;
 	
 		label=new JLabel();
 		label.setText("");
@@ -49,8 +47,8 @@ class Authenticate extends JFrame implements ActionListener{
 		String value1=text1.getText();
 				
 		try{
-			psswrchk= new DataOutputStream(cSocket.getOutputStream());
-			verification= new DataInputStream(cSocket.getInputStream());
+			psswrchk= new DataOutputStream(host_socket.getOutputStream());
+			verification= new DataInputStream(host_socket.getInputStream());
 			psswrchk.writeUTF(value1);
 			verify=verification.readUTF();
 	
@@ -66,13 +64,13 @@ class Authenticate extends JFrame implements ActionListener{
 			}catch (IOException e){
 				e.printStackTrace();		
 			}
-			new CreateFrame(cSocket,width,height);
+			new CreateFrame(host_socket,width,height);
 			dispose();
 			}
 				
 			else{
-				System.out.println("enter the valid password");
-				JOptionPane.showMessageDialog(this, "Incorrect  password", "Error", JOptionPane.ERROR_MESSAGE);
+				System.out.println("PLEASE ENTER THE PASSWORD");
+				JOptionPane.showMessageDialog(this, "INCORRECT PASSWORD!", "Error", JOptionPane.ERROR_MESSAGE);
 				dispose();
 				}
 

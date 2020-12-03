@@ -18,15 +18,15 @@ class CreateFrame extends Thread {
 	//JDesktopPane represents the main container that will contain all connected clients' screens
 
 	private JDesktopPane desktop = new JDesktopPane();
-	private Socket cSocket = null;
+	private Socket host_socket = null;
 	private JInternalFrame interFrame = new JInternalFrame("Server Screen", true, true, true);
-	private JPanel cPanel = new JPanel();
+	private JPanel SCREEN_PANEL = new JPanel();
 
-	public CreateFrame(Socket cSocket, String width, String height) {
+	public CreateFrame(Socket host_socket, String width, String height) {
 
 		this.width = width;
 		this.height = height;
-		this.cSocket = cSocket;
+		this.host_socket = host_socket;
 		start();
 	}
 	
@@ -41,7 +41,7 @@ class CreateFrame extends Thread {
 		frame.setExtendedState(frame.getExtendedState()|JFrame.MAXIMIZED_BOTH);		//CHECK THIS LINE
 		frame.setVisible(true);
 		interFrame.setLayout(new BorderLayout());
-		interFrame.getContentPane().add(cPanel, BorderLayout.CENTER);
+		interFrame.getContentPane().add(SCREEN_PANEL, BorderLayout.CENTER);
 		interFrame.setSize(100,100);
 		desktop.add(interFrame);
 
@@ -53,7 +53,7 @@ class CreateFrame extends Thread {
 		}
 
 		//This allows to handle KeyListener events
-		cPanel.setFocusable(true);
+		SCREEN_PANEL.setFocusable(true);
 		interFrame.setVisible(true);
 		
 	}
@@ -65,14 +65,14 @@ class CreateFrame extends Thread {
 		drawGUI();
 
 		try{
-			in = cSocket.getInputStream();
+			in = host_socket.getInputStream();
 			}catch (IOException ex){
 			ex.printStackTrace();
 		}
 
 		//Start receiving screenshots
-		new ReceiveScreen(in,cPanel);
+		new ReceiveScreen(in,SCREEN_PANEL);
 		//Start sending events to the client
-		new SendEvents(cSocket,cPanel,width,height);
+		new SendEvents(host_socket,SCREEN_PANEL,width,height);
 	}
 }

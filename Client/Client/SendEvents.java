@@ -12,16 +12,16 @@ import javax.swing.JPanel;
 
 
 class SendEvents implements KeyListener, MouseMotionListener, MouseListener{
-	private Socket cSocket = null;
-	private JPanel cPanel = null;
+	private Socket HOST_SOCKET = null;
+	private JPanel SCREEN_PANEL = null;
 	private PrintWriter writer = null;
 	String width = "", height = "";
 	double w;
 	double h;
 
 	SendEvents(Socket s, JPanel p, String width, String height){
-		cSocket = s;
-		cPanel = p;
+		HOST_SOCKET = s;
+		SCREEN_PANEL = p;
 		this.width = width;
 		this.height = height;
 		w = Double.valueOf(width.trim()).doubleValue();
@@ -29,21 +29,21 @@ class SendEvents implements KeyListener, MouseMotionListener, MouseListener{
 
 		//Associate event listeners to the panel
 
-		cPanel.addKeyListener(this);
-		cPanel.addMouseListener(this);
-		cPanel.addMouseMotionListener(this);
+		SCREEN_PANEL.addKeyListener(this);
+		SCREEN_PANEL.addMouseListener(this);
+		SCREEN_PANEL.addMouseMotionListener(this);
 
 		try{
 			//Prepare PrintWriter which will be used to send commands to the client
-			writer = new PrintWriter(cSocket.getOutputStream());
+			writer = new PrintWriter(HOST_SOCKET.getOutputStream());
 			} catch(IOException ex) {
 			ex.printStackTrace();
 		}
 	}
 
 	public void mouseDragged(MouseEvent e){
-		double xScale = (double)w/cPanel.getWidth();
-		double yScale = (double)h/cPanel.getHeight();
+		double xScale = (double)w/SCREEN_PANEL.getWidth();
+		double yScale = (double)h/SCREEN_PANEL.getHeight();
 		writer.println(Commands.MOVE_MOUSE.getAbbrev());
 		writer.println((int)(e.getX()*xScale));
 		writer.println((int)(e.getY()*yScale));
@@ -60,8 +60,8 @@ class SendEvents implements KeyListener, MouseMotionListener, MouseListener{
 	}
 
 	public void mouseMoved(MouseEvent e){
-		double xScale = (double)w/cPanel.getWidth();
-		double yScale = (double)h/cPanel.getHeight();
+		double xScale = (double)w/SCREEN_PANEL.getWidth();
+		double yScale = (double)h/SCREEN_PANEL.getHeight();
 		writer.println(Commands.MOVE_MOUSE.getAbbrev());
 		writer.println((int)(e.getX()*xScale));
 		writer.println((int)(e.getY()*yScale));

@@ -1,15 +1,8 @@
 package Server;
 
-import java.awt.Dimension;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
 
 public class InitConnection{
 		
@@ -23,7 +16,7 @@ public class InitConnection{
 		Robot robot = null;
 		Rectangle rectangle = null;
 		try{
-			System.out.println("Awaiting Connection from Client");
+			System.out.println("AWAITING CONNECTION FROM CLIENT");
 			socket=new ServerSocket(port);
 			
 			GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -41,7 +34,6 @@ public class InitConnection{
 				Socket sc=socket.accept();
 				password=new DataInputStream(sc.getInputStream());
 				verify=new DataOutputStream(sc.getOutputStream());
-				//String username=password.readUTF();
 				String pssword=password.readUTF();
 				
 				if(pssword.equals(value1)){
